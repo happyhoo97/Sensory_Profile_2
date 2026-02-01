@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Box,
   Typography,
-  TextField,
   Button,
   CircularProgress,
   Alert,
@@ -12,47 +10,22 @@ import {
 import { supabase } from '../../supabaseClient'; // Adjust path as needed
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
-  const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault();
+
+  const handleGoogleLogin = async () => { // Renamed and simplified for direct Google login
     setLoading(true);
     setError(null);
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
     });
-
     if (authError) {
       setError(authError.message);
-    } else {
-      navigate('/dashboard');
     }
-    setLoading(false);
-  };
-
-  // Placeholder for social login - user requested Kakao, Google, Naver
-  const handleSocialLogin = async (provider: 'google') => {
-    setLoading(true);
-    setError(null);
-
-    // Supabase supports Google directly.
-    if (provider === 'google') {
-      const { error: authError } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-      });
-      if (authError) {
-        setError(authError.message);
-      }
-    } else {
-      setError(`Social login with ${provider} is not yet implemented.`);
-    }
-    setLoading(false);
+    // setLoading(false) is handled by the redirect, or if error, we set it here.
+    // If no error, it redirects away, so setLoading(false) is not needed immediately.
   };
 
   return (
@@ -65,55 +38,24 @@ const LoginPage: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <Typography component="h1" variant="h5">
-          Gemini SP2 System Login
+        <Typography component="h1" variant="h5" sx={{ mb: 4 }}>
+          SP2 System Login {/* Changed title */}
         </Typography>
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Sign In'}
-          </Button>
-          {error && <Alert severity="error">{error}</Alert>}
-          
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
-            <Button
-              variant="outlined"
-              onClick={() => handleSocialLogin('google')}
-              disabled={loading}
-            >
-              Google Login
-            </Button>
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        
+        {/* Email/Password fields and Sign In button removed */}
 
-          </Box>
+        <Box sx={{ mt: 2, width: '100%' }}> {/* Adjusted Box for full width button */}
+          <Button
+            variant="contained" // Made contained for prominence
+            color="primary" // Standard primary color
+            onClick={handleGoogleLogin} // Direct call
+            disabled={loading}
+            fullWidth // Make it wide
+            sx={{ fontSize: '1.2rem', padding: '15px 0' }} // Made bigger
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Login with Google'} {/* Changed text */}
+          </Button>
         </Box>
       </Box>
     </Container>

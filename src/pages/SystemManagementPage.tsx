@@ -22,7 +22,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -68,7 +67,7 @@ const SystemManagementPage: React.FC = () => {
       // Cast data to User[] and ensure app_metadata is correctly parsed if it's a string
       // Note: RPC returns an array of objects, each object should match the User interface.
       // app_metadata will already be an object if it was stored as JSONB.
-      const formattedUsers = data.map(user => ({
+      const formattedUsers = data.map((user: User) => ({ // Explicitly type 'user' as User
         ...user,
         app_metadata: typeof user.app_metadata === 'string' ? JSON.parse(user.app_metadata) : user.app_metadata
       }));

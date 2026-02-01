@@ -7,7 +7,9 @@ import DashboardPage from './pages/DashboardPage';
 import BabyListManagementPage from './pages/BabyListManagementPage';
 import MakeNewProfilePage from './pages/MakeNewProfilePage';
 import SearchProfileHistoryPage from './pages/SearchProfileHistoryPage';
-import SystemManagementPage from './pages/SystemManagementPage'; // Import the new page
+import SearchProfileHistoryPage from './pages/SearchProfileHistoryPage';
+import SystemManagementPage from './pages/SystemManagementPage';
+import AuthCallback from './pages/AuthCallback'; // Import the new callback page
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 
 function App() {
@@ -83,6 +85,10 @@ function App() {
             <SystemManagementPage />
           </ProtectedRoute>
         }
+      />
+      <Route // New Auth Callback route
+        path="/auth-callback"
+        element={<AuthCallback />}
       />
       {/* Redirect root to either dashboard or login */}
       <Route
