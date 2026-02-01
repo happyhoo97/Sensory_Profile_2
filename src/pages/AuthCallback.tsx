@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CircularProgress, Box, Typography, Container, Alert } from '@mui/material';
+import { CircularProgress, Typography, Container, Alert } from '@mui/material';
 import { supabase } from '../supabaseClient';
 
 const AuthCallback: React.FC = () => {
